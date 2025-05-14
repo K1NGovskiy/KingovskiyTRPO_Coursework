@@ -6,34 +6,79 @@
 #include "MyData.h"
 #include "CMyDataFile.h"
 
-int GetInt(const std::string& prompt) {
-    int value;
-    while (true) {
-        std::cout << prompt;
-        std::cin >> value;
-        if (std::cin.fail()) {
-            std::cout << "\n\nНеверный ввод! Повторите попытку.\n\n";
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
+bool is_int(std::string str, int& res) {
+    if (str.empty()) return false;
+
+    size_t start = 0;
+    if (str[0] == '-' || str[0] == '+') start = 1;
+    if (start == str.size()) return false; // только знак без цифр
+
+    for (size_t i = start; i < str.size(); ++i) {
+        if (!std::isdigit(str[i])) return false;
+    }
+
+    res = atoi(str.c_str());
+    return true;
+}
+
+bool is_float(const std::string& str, float& res) {
+    if (str.empty()) return false;
+
+    size_t i = 0;
+    bool hasDecimal = false;
+    bool hasDigits = false;
+
+    // Знак в начале
+    if (str[i] == '+' || str[i] == '-') i++;
+
+    for (; i < str.size(); ++i) {
+        if (std::isdigit(str[i])) {
+            hasDigits = true;
+        }
+        else if (str[i] == ',' && !hasDecimal) {
+            hasDecimal = true;
         }
         else {
-            return value;
+            return false; // Лишний символ
+        }
+    }
+
+    if (hasDigits) {
+        res = atof(str.c_str());
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+int GetInt(const std::string& prompt) {
+    std::string value;
+    int res = 0;
+    while (true) {
+        std::cout << prompt;
+        getline(std::cin, value);
+
+        if (is_int(value, res)) {
+            return res;
+        }
+        else {
+            std::cout << "\n\nНеверный ввод! Повторите попытку.\n\n";
         }
     }
 }
 
 float GetFloat(const std::string& prompt) {
-    float value;
+    std::string value;
+    float res;
     while (true) {
         std::cout << prompt;
-        std::cin >> value;
-        if (std::cin.fail()) {
-            std::cout << "\n\nНеверный ввод! Повторите попытку.\n\n";
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
+        getline(std::cin, value);
+
+        if (is_float(value, res)) {
+            return res;
         }
         else {
-            return value;
+            std::cout << "\n\nНеверный ввод! Повторите попытку.\n\n";
         }
     }
 }
