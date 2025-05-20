@@ -2,9 +2,9 @@
 #include <string>
 #include <vector>
 
-struct MyData {
-    int intValue;
-    float floatValue;
-    std::string strValue;
-    std::vector<float> floatArray;
+struct MyData { // Структура для хранения набора пользовательских данных
+    int intValue;   // Целочисленное значение (например, идентификатор или счетчик)
+    float floatValue;   // Одно вещественное значение (например, измерение или коэффициент)
+    std::string strValue;   // Строка (например, имя, описание или текст)
+    std::vector<float> floatArray;  // Массив вещественных чисел (например, список измерений или значений)
 };
